@@ -95,8 +95,10 @@ Because fingerprints are computed for *everything* that leaves, verification is
 ## Install
 
 ```bash
-pip install "llm-egress-audit[proxy]"        # add ,pdf for PDF text matching
+pip install "llm-egress-audit[proxy] @ git+https://github.com/odin66666/llm-egress-audit"
 ```
+
+Use `[proxy,pdf]` for PDF text matching. A PyPI release is planned.
 
 Python ≥ 3.9. The core has no dependencies; `[proxy]` pulls mitmproxy, `[pdf]` pulls pypdf.
 
@@ -214,6 +216,27 @@ the machine" are different facts, and only the second one is measured.
 
 Other clients should work if they honour `HTTPS_PROXY` and a custom CA. Please open an
 issue with the result of the canary test for your agent, whether it passes or fails.
+
+## How it compares
+
+Most LLM privacy tools look for **kinds** of sensitive data: an email address, a card
+number, an API key, a name. That is the right approach for short secrets and personal
+data, and this tool does not replace it:
+
+| Tool | Approach | Best at |
+|---|---|---|
+| [LLM Guard](https://github.com/protectai/llm-guard) | scanners you call from inside your application | PII, secrets, prompt injection in your own app's prompts |
+| [OneAIFW](https://github.com/funstory-ai/aifw) | masks sensitive values before the call, restores them after | names, addresses, payment data, passwords |
+| Enterprise DLP (Microsoft Purview, Symantec…) | document fingerprinting on the corporate network | organisations with managed endpoints and a DLP team |
+| **llm-egress-audit** | fingerprints of *your own files* against *all* outgoing traffic | "did **this** document leave, how much, when, to whom?" |
+
+A contract, a medical report or an unpublished chapter has no pattern a scanner can
+recognise: it is sensitive because of what it is, not because of how it looks. That is
+the gap this tool covers, locally, for any agent, without changing the agent and without
+declaring anything in advance.
+
+They combine well: a pattern scanner catches the short secrets that fall below this
+tool's threshold, and this tool catches the documents a pattern scanner cannot see.
 
 ## Limits
 
