@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm-egress-audit"
+version = "0.1.0"
+description = "Record what leaves your machine towards LLM APIs and grade how exposed a file is (0-4)."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Heliotelos" }]
+requires-python = ">=3.9"
+keywords = ["llm", "privacy", "audit", "mitmproxy", "data-leak", "claude", "openai", "gemini"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Security",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/odin66666/llm-egress-audit"
+Issues = "https://github.com/odin66666/llm-egress-audit/issues"
+
+[project.optional-dependencies]
+proxy = ["mitmproxy>=10"]
+pdf = ["pypdf>=4"]
+
+[project.scripts]
+llm-egress-audit = "llm_egress_audit.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
